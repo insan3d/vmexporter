@@ -33,4 +33,3 @@ COPY --from=venv /opt/venv /opt/venv
 
 EXPOSE 8080
 ENTRYPOINT [ "/opt/venv/bin/python3", "/opt/vmexporter.py"]
-CMD ["--help"]
