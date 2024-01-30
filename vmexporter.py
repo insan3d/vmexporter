@@ -4,14 +4,14 @@
 Exports data from VictoriaMetrics in metrics (application/openmetrics-text)
 format via HTTP API.
 
-Query the --path parameter (/export by default) with additional 'target'
-parameter with VictoriaMetrics address and optional 'last' parameter with
-amount of last seconds to be exported (to avoid manually calculating 'start'
-and 'end' parameters). The 'start', 'end' and 'match[]' ({__name__!=''} by
-default) are the same parameters as described in
-https://docs.victoriametrics.com/#how-to-export-time-series.
+Query the --path parameter (/export by default) with additional target
+parameter with VictoriaMetrics address and optional last parameter with amount
+last seconds to be exported (to avoid manually calculating start and end
+parameters).
 
-May be used to scrape certain metrics by foreign Prometheus/vmagent.
+The start, end and match[] (which is {__name__!=''} by default) are described
+in VictoriaMetrics docs:
+https://docs.victoriametrics.com/#how-to-export-time-series.
 """
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, Namespace
