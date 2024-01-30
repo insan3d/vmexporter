@@ -17,7 +17,6 @@ https://docs.victoriametrics.com/#how-to-export-time-series.
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, Namespace
 from contextlib import suppress
 from json import JSONDecodeError, loads
-from logging import Logger, getLogger
 from time import time
 from typing import Any
 from http import HTTPStatus
@@ -35,8 +34,6 @@ __version__ = "1.0.0"
 __status__ = "Release"
 __author__ = "Alexander Pozlevich"
 __email__ = "apozlevich@gmail.com"
-
-logger: Logger = getLogger(name=__name__)
 
 # Export own info metric
 Info(
@@ -91,6 +88,8 @@ async def handle_metrics(_: Request) -> Response:
 
 
 def make_url(query: MultiMapping[str]) -> str:
+    """Build client URL from server query."""
+
     url: str = "/api/v1/export?"
 
     # Export last N seconds if set to
@@ -170,24 +169,6 @@ async def handle_export(request: Request) -> Response:
     return Response(body=body, status=200, content_type="text/plain")
 
 
-def make_app(
-    path: str,
-    self: str,
-) -> Application:
-    """Application factory."""
-
-    app: Application = Application()
-
-    app.add_routes(
-        routes=[
-            get(path=path, handler=handle_export),
-            get(path=self, handler=handle_metrics),
-        ]
-    )
-
-    return app
-
-
 if __name__ == "__main__":
     with suppress(KeyboardInterrupt):
         args_parser = ArgumentParser(
@@ -237,9 +218,13 @@ if __name__ == "__main__":
         )
 
         args: Namespace = args_parser.parse_args()
-        vmexport: Application = make_app(
-            path=args.path,
-            self=args.self,
+        app: Application = Application()
+
+        app.add_routes(
+            routes=[
+                get(path=args.path, handler=handle_export),
+                get(path=args.self, handler=handle_metrics),
+            ]
         )
 
-        run_app(app=vmexport, host=args.host, port=args.port, print=None)
+        run_app(app=app, host=args.host, port=args.port, print=None)
