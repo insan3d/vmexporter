@@ -46,18 +46,22 @@ redis_config_maxclients{job="redis_exporter_targets",instance="redis://host.dock
 Thus this tool may be used to export some metrics for external Prometheus/VictoriaMetrics, such as exporting couple of 
 bussiness-related metrics from incapsulated project infrastructure.
 
+Or, which was the main goal, use multi-target-like scraping in environment where it is not possible (e.g. you only can provide
+only scrape URLs to externap monitoring department) by running own VictoriaMetrics with small retention period.
+
 Note what target parameter should include scheme (`http://`) and query parameters are URL-encoded.
 
 ## Metrics
 
 ### Additional metrics exported on `--self` option path (default: `/metrics`):
 
-| Name                         | Type    | Labels   | Description                       |
-|------------------------------|---------|----------|-----------------------------------|
-| `vmexporter_export_duration` | Gauge   | `target` | Last export duration (in seconds) |
-| `vmexporter_export_count`    | Counter | `target` | Exports done total                |
-| `vmexporter_export_failures` | Counter | `target` | Exports failed total              |
-| `vmexporter_export_metrics`  | Counter | `target` | Exported metrics total            |
+| Name                         | Type    | Labels                                              | Description                       |
+|------------------------------|---------|-----------------------------------------------------|-----------------------------------|
+| `vmexporter_export_duration` | Gauge   | `target`                                            | Last export duration (in seconds) |
+| `vmexporter_export_count`    | Counter | `target`                                            | Exports done total                |
+| `vmexporter_export_failures` | Counter | `target`                                            | Exports failed total              |
+| `vmexporter_export_metrics`  | Counter | `target`                                            | Exported metrics total            |
+| `vmexporter`                 | Info    | `version`, `major`, `minor`, `patchlevel`, `status` | `vmexporter` version information  |
 
 ### Default `prometheus_client` metrics are:
 
